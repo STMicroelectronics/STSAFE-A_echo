@@ -1,55 +1,59 @@
 
-# STSAFE-A Accessory authentication
+# STSAFE-A Echo Example
 
-This project illustrates how to use the STSAFE-A Secure Element and STMicroelectronics Secure Element Library to perform device/accessory authentication.
-When loaded on the target MCU platform , the project performes an STSAFE-A authentication . This authentication scheme is typicaly used in accessories authentication use cases.
+This project illustrates how to use the STSAFE-A Secure Element and STMicroelectronics Secure Element Library to perform an echo loop between Host and STSAFE-A Secure Element . Echo loop scenario is usefull for :
+- SE integration and stability test
+- Accessory hot-plug/presence detection
+
 
 ```mermaid
 sequenceDiagram
     box Authenticator
-    participant AUTH as Host MCU <br> (CA certificate)
+    participant HOST as Host MCU
     end
     box Accessory
-    participant STSE as STSAFE-A <br> (Leaf-certificate + Priv_key)
+    participant STSE as STSAFE-A
     end
-    activate AUTH
-    AUTH ->>+ STSE : Get Certificate <br>(read User-NVM zone 0)
-    STSE -->>- AUTH : Accessory leaf-certificate
-    note over AUTH : Verify certificate <br> using public key <br>from CA certificate
-    note over AUTH : Generate Challenge <br> (TRNG)
-    AUTH ->>+ STSE : ECDSA_Sign(Challenge)
-    note over STSE : Generate signature <br> using Priv_ke <br> (ECDSA sign)
-    STSE -->>- AUTH : signature
-    Note over AUTH : Verify signature <br> using public key <br>from CA certificate <br> (ECDSA verify)
-    deactivate AUTH
+    activate HOST
+loop Echo loop
+    note over HOST : prepare random content and size message
+    HOST ->>+ STSE : Echo (Message)
+    STSE -->>- HOST :echoed Message
+    note over HOST : Compare Message and echoed_message
+    deactivate HOST
+end
 ```
 
 The example applicative flowchart is illustrated below :
 
 ```mermaid
 flowchart TD
-    A["MAIN"] --> B["Initialize Apps terminal \n(baudrate = 115200)"]
-    B --> C["Print example title and instructions"]
-    C --> D["Initialize STSE Handler"]
-    D --> E["Parse and print Root CA certificate"]
-    E --> F["Get STSAFE-A leaf-certificate"]
-    F --> G["Parse and print STSAFE-A leaf-certificate"]
-    G --> H["Verify device certificate signature using Root CA public key"]
-    H --> I["Generate Challenge \n(Random Number)"]
-    I --> J["Get Challenge signature from STSAFE-A "]
-    J --> K["Verify signature using STSAFE-A pubkey"]
-    K --> L[endless loop]
+    A[Start] --> B[Initialize terminal (UART)]
+    B --> C[Print example title]
+    C --> D[Set default handler values]
+    D --> E[Set handler parameters]
+    E --> F[Initialize STSAFE-A120]
+    F --> G{Infinite Loop}
+    G --> H[Generate random message length]
+    H --> I[Create message and echoed_message buffers]
+    I --> J[Randomize message content]
+    J --> K[Print message]
+    K --> L[Call stse_device_echo]
+    L --> M{Echo OK?}
+    M -- No --> N[Print error and halt]
+    M -- Yes --> O[Compare message and echoed_message]
+    O --> P{Match?}
+    P -- No --> Q[Print compare fail, print echoed message, halt]
+    P -- Yes --> R[Print echoed message]
+    R --> S[Print separator]
+    S --> T[Wait 1s]
+    T --> G
 ```
 
 STSELib API used in the example are the following :
 
 - stse_init
-- stse_certificate_parse
-- stse_certificate_print_parsed_cert
-- stse_certificate_get_key_type
-- stse_certificate_verify_signature
-- stse_certificate_is_parent
-- stse_ecc_generate_signature
+- stse_echo
 
 ## Hardware and Software Prerequisites
 
