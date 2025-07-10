@@ -43,7 +43,7 @@ flowchart TD
     P -- No --> Q[Print compare fail, print echoed message, halt]
     P -- Yes --> R[Print echoed message]
     R --> S[Wait 1s]
-    S --> G
+    S --> I
 ```
 
 STSELib API used in the example are the following :
