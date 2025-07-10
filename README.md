@@ -28,7 +28,7 @@ The example applicative flowchart is illustrated below :
 
 ```mermaid
 flowchart TD
-    A[Start] --> B[Initialize terminal (UART)]
+    A[Start] --> B[Initialize terminal]
     B --> C[Print example title]
     C --> D[Set default handler values]
     D --> E[Set handler parameters]
