@@ -28,10 +28,9 @@ The example applicative flowchart is illustrated below :
 
 ```mermaid
 flowchart TD
-    A[Start] --> B[Initialize terminal]
-    B --> C[Print example title]
+    A[Start] --> C[Initialize terminal and print example title]
     C --> E[Set STSE handler values]
-    E --> F[Initialize STSAFE-A120]
+    E --> F[Initialize STSE]
     F --> I{Infinite Loop}
     I --> J[Randomize message content and length]
     J --> K[Print message]
