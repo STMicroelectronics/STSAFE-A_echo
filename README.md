@@ -30,13 +30,10 @@ The example applicative flowchart is illustrated below :
 flowchart TD
     A[Start] --> B[Initialize terminal]
     B --> C[Print example title]
-    C --> D[Set default handler values]
-    D --> E[Set handler parameters]
+    C --> E[Set STSE handler values]
     E --> F[Initialize STSAFE-A120]
-    F --> G{Infinite Loop}
-    G --> H[Generate random message length]
-    H --> I[Create message and echoed_message buffers]
-    I --> J[Randomize message content]
+    F --> I{Infinite Loop}
+    I --> J[Randomize message content and length]
     J --> K[Print message]
     K --> L[Call stse_device_echo]
     L --> M{Echo OK?}
@@ -45,9 +42,8 @@ flowchart TD
     O --> P{Match?}
     P -- No --> Q[Print compare fail, print echoed message, halt]
     P -- Yes --> R[Print echoed message]
-    R --> S[Print separator]
-    S --> T[Wait 1s]
-    T --> G
+    R --> S[Wait 1s]
+    S --> G
 ```
 
 STSELib API used in the example are the following :
