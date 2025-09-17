@@ -1,7 +1,8 @@
 
 # STSAFE-A Echo Example
 
-This project illustrates how to use the STSAFE-A Secure Element and STMicroelectronics Secure Element Library to perform an echo loop between Host and STSAFE-A Secure Element . Echo loop scenario is usefull for :
+This project illustrates how to use the STSAFE-A Secure Element and STMicroelectronics Secure Element Library to perform an echo loop between Host and STSAFE-A Secure Element.<br>
+Echo loop scenario is usefull for :
 - SE integration and stability test
 - Accessory hot-plug/presence detection
 
